@@ -3,257 +3,266 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Panel administracyjny — full</title>
+<title>Panel administracyjny — single file (v2)</title>
 <style>
-/* ---- STYLING: estetyczny ciemny panel ---- */
-:root{
-  --bg-1: #071227;
-  --bg-2: #0b1a2a;
-  --accent: #2563eb;
-  --muted: #94a3b8;
-  --ok: #16a34a;
-  --danger: #ef4444;
-  --card-grad: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-}
-*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8}
-html,body{height:100%;margin:0;background:linear-gradient(180deg,#041225 0%, #07132a 100%)}
-.wrap{max-width:1200px;margin:28px auto;padding:20px}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-h1{margin:0;font-size:20px}
-.small{font-size:13px;color:var(--muted)}
-.card{background:var(--card-grad);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-.form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-input,select,button,textarea{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none}
-input::placeholder,textarea::placeholder{color:var(--muted)}
-button{cursor:pointer;border:none}
-.btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted)}
-.role-pill{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;margin-right:6px}
-.danger{background:linear-gradient(180deg,#7f1d1d,#b91c1c);color:white;padding:6px 10px;border-radius:8px}
-.ok{background:linear-gradient(180deg,#166534,#059669);color:white;padding:6px 10px;border-radius:8px}
-.muted{color:var(--muted)}
-.flex{display:flex;gap:8px;align-items:center}
-.cols{display:grid;grid-template-columns:1fr 380px;gap:12px}
-@media(max-width:980px){.cols{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}}
-table{width:100%;border-collapse:collapse;margin-top:12px}
-th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
-th{font-size:13px;color:var(--muted)}
-.announce{background:linear-gradient(180deg, rgba(37,99,235,0.06), rgba(255,255,255,0.02));padding:10px;border-radius:8px;margin-bottom:8px}
-.history-row{font-size:13px;color:var(--muted);padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02)}
-.footer-note{margin-top:18px;color:var(--muted);font-size:13px}
-kbd{background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:4px;font-family:monospace}
-.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px}
-.center{display:flex;justify-content:center;align-items:center}
+  :root{--bg:#071227;--card:#0b1a2a;--accent:#2563eb;--muted:#94a3b8;--ok:#16a34a;--danger:#ef4444}
+  *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8}
+  body{margin:0;background:linear-gradient(180deg,#041225 0%, #07132a 100%);min-height:100vh}
+  .wrap{max-width:1100px;margin:28px auto;padding:20px}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  h1{margin:0;font-size:20px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+  .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  input,select,button,textarea{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none}
+  input::placeholder, textarea::placeholder{color:var(--muted)}
+  button{cursor:pointer;border:none}
+  .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px}
+  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted)}
+  .small{font-size:13px;color:var(--muted)}
+  nav button{margin-right:8px}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  th{font-size:13px;color:var(--muted)}
+  .role-pill{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;margin-right:6px}
+  .danger{background:linear-gradient(180deg,#7f1d1d,#b91c1c);color:white;padding:6px 10px;border-radius:8px}
+  .ok{background:linear-gradient(180deg,#166534,#059669);color:white;padding:6px 10px;border-radius:8px}
+  .muted{color:var(--muted)}
+  .flex{display:flex;gap:8px;align-items:center}
+  .cols{display:grid;grid-template-columns:1fr 370px;gap:12px}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}nav{margin-top:8px}}
+  footer{margin-top:18px;color:var(--muted);font-size:13px}
+  .announce{background:linear-gradient(180deg, rgba(37,99,235,0.06), rgba(255,255,255,0.02));padding:10px;border-radius:8px;margin-bottom:8px}
+  .history-row{font-size:13px;color:var(--muted);padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.02)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div>
-      <h1>Panel administracyjny — pełna wersja</h1>
-      <div class="small">Local demo — wszystko w jednym pliku, zapisane w <code>localStorage</code>.</div>
+      <h1>Panel administracyjny (local) — v2</h1>
+      <div class="small">Zapis lokalny w przeglądarce — plusy/minusy, awanse, ogłoszenia.</div>
     </div>
     <div id="userbox"></div>
   </header>
 
   <div id="app"></div>
 
-  <div class="footer-note">
-    Seed ról: <strong>support</strong>, <strong>moderator</strong>, <strong>administrator</strong>, <strong>vowner</strong>.
-    zaloguj sie: <kbd>login</kbd> / <kbd>haslo</kbd>.
-  </div>
+  <footer class="small">Seed ról: <strong>support</strong>, <strong>moderator</strong>, <strong>administrator</strong>, <strong>vowner</strong>. Wpisz: <code>login</code> / <code>kod</code></footer>
 </div>
 
 <script>
 /*
-  Kompletny klient-only panel:
-  - login (owner seeded)
-  - users, roles, plus/minus, auto-penalty, promotions, announcements
-  - everything stored in localStorage (admin-panel-full)
-  - has visible login button at top of form
+  Single-file admin panel v2
+  - storage key: admin-panel-v2
+  - features: users/roles, plus/minus system, auto-daily minus for offline users,
+    promotions/demotions, last activity tracking, announcements by vowner.
+  - password hashing: PBKDF2 via Web Crypto (edu only)
 */
 
-// -------------------- Konfiguracja --------------------
-const STORAGE_KEY = 'admin-panel-full';
+const STORAGE_KEY = 'admin-panel-v2';
 const ROLE_HIERARCHY = ['support','moderator','administrator','vowner'];
 
-// -------------------- Helpery --------------------
-function uid(prefix='id'){ return prefix + '_' + Math.random().toString(36).slice(2,10); }
+// ---------- Crypto helpers ----------
+async function genSalt(len = 16) {
+  const arr = crypto.getRandomValues(new Uint8Array(len));
+  return btoa(String.fromCharCode(...arr));
+}
+async function derivePasswordKey(password, saltB64, iterations = 100_000) {
+  const enc = new TextEncoder();
+  const passKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const salt = Uint8Array.from(atob(saltB64), c=>c.charCodeAt(0));
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations, hash:'SHA-256'}, passKey, 256);
+  const hash = new Uint8Array(bits);
+  return btoa(String.fromCharCode(...hash));
+}
+async function hashPassword(password) {
+  const salt = await genSalt(16);
+  const hash = await derivePasswordKey(password, salt);
+  return salt + '$' + hash;
+}
+async function verifyPassword(password, stored) {
+  if(!stored) return false;
+  const [salt, hash] = stored.split('$');
+  const tryHash = await derivePasswordKey(password, salt);
+  return tryHash === hash;
+}
+
+// ---------- Storage ----------
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch(e){ return null; }
+}
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ---------- Seed ----------
+async function seedIfNeeded() {
+  let s = loadState();
+  if (s) return s;
+  const roles = ['support','moderator','administrator','vowner'].map((name, idx) => ({ id: 'r_'+idx, name }));
+  const ownerUsername = 'adminaccountowner';
+  const ownerPlain = 'ownerpassword1245';
+  const ownerId = 'u_owner';
+  const ownerHash = await hashPassword(ownerPlain);
+  const now = new Date().toISOString();
+  const users = [{ id: ownerId, username: ownerUsername, passwordHash: ownerHash, displayName: 'Owner', createdAt: now, lastActivity: now, lastAutoPenaltyAt: now, plus:0, minus:0 }];
+  const user_roles = [{ id: 'ur_owner_v', userId: ownerId, roleId: roles.find(r=>r.name==='vowner').id }];
+  const plusminusHistory = []; // {id, actorId, targetId, delta, reason, at}
+  const announcements = []; // {id, authorId, title, body, at}
+  const settings = { serverName: 'Mój serwer', welcomeMessage: 'Witaj!' };
+  const state = { users, roles, user_roles, plusminusHistory, announcements, settings, createdAt: now, lastAutoRun: null };
+  saveState(state);
+  return state;
+}
+
+// ---------- App state ----------
+let STATE = null;
+let CURRENT_USER = null;
+
+// ---------- Utils ----------
+function uid(prefix='id') { return prefix+'_'+Math.random().toString(36).slice(2,10); }
 function nowIso(){ return new Date().toISOString(); }
-function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function findUserById(id){ return STATE.users.find(u=>u.id===id); }
+function getRoleNamesForUser(userId) {
+  const roleIds = (STATE.user_roles||[]).filter(ur=>ur.userId===userId).map(ur=>ur.roleId);
+  return (STATE.roles||[]).filter(r=>roleIds.includes(r.id)).map(r=>r.name);
+}
+function hasRole(userId, roleName) {
+  return getRoleNamesForUser(userId).includes(roleName);
+}
+function saveAndRefresh(){ saveState(STATE); renderApp(); }
 function formatAgo(iso){
   if(!iso) return '—';
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff/60000);
-  if(mins < 1) return 'teraz';
-  if(mins < 60) return mins + 'm temu';
+  if (mins < 1) return 'teraz';
+  if (mins < 60) return mins + 'm temu';
   const hrs = Math.floor(mins/60);
-  if(hrs < 24) return hrs + 'h temu';
+  if (hrs < 24) return hrs + 'h temu';
   const days = Math.floor(hrs/24);
   return days + 'd temu';
 }
-
-// -------------------- Crypto (client-side educational PBKDF2) --------------------
-async function genSalt(len=16){
-  const arr = crypto.getRandomValues(new Uint8Array(len));
-  return btoa(String.fromCharCode(...arr));
-}
-async function deriveKey(password, saltB64, iterations=150000){
-  const enc = new TextEncoder();
-  const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
-  const salt = Uint8Array.from(atob(saltB64), c=>c.charCodeAt(0));
-  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations, hash:'SHA-256'}, baseKey, 256);
-  const hash = new Uint8Array(bits);
-  return btoa(String.fromCharCode(...hash));
-}
-async function hashPassword(password){
-  const salt = await genSalt(16);
-  const h = await deriveKey(password, salt);
-  return salt + '$' + h;
-}
-async function verifyPassword(password, stored){
-  if(!stored) return false;
-  const [salt,hash] = stored.split('$');
-  const tryh = await deriveKey(password, salt);
-  return tryh === hash;
-}
-
-// -------------------- Storage util --------------------
-function loadState(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(!raw) return null;
-  try{ return JSON.parse(raw); } catch(e){ return null; }
-}
-function saveState(state){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// -------------------- Seed initial state --------------------
-async function seedIfNeeded(){
-  let st = loadState();
-  if(st) return st;
-  const roles = ROLE_HIERARCHY.map((name,i)=>({ id:'r_'+i, name }));
-  const owner = {
-    id: 'u_owner',
-    username: 'adminaccountowner',
-    passwordHash: await hashPassword('ownerpassword1245'),
-    displayName: 'Owner',
-    createdAt: nowIso(),
-    lastActivity: nowIso(),
-    lastAutoPenaltyAt: nowIso()
-  };
-  const users = [owner];
-  const user_roles = [{ id: uid('ur'), userId: owner.id, roleId: roles.find(r=>r.name==='vowner').id }];
-  const plusminusHistory = []; // {id, actorId, targetId, delta, reason, at}
-  const announcements = []; // {id, authorId, title, body, at}
-  const settings = { serverName: 'Demo server', welcomeMessage: 'Witaj na serwerze' };
-  st = { users, roles, user_roles, plusminusHistory, announcements, settings, createdAt: nowIso(), lastAutoRun: null };
-  saveState(st);
-  return st;
-}
-
-// -------------------- App state --------------------
-let STATE = null;
-let CURRENT_USER = null; // {id, username, displayName}
-
-// -------------------- RBAC helpers --------------------
-function getRoleNamesForUser(userId){
-  const roleIds = (STATE.user_roles || []).filter(ur=>ur.userId===userId).map(ur=>ur.roleId);
-  return (STATE.roles||[]).filter(r=>roleIds.includes(r.id)).map(r=>r.name);
-}
-function hasRole(userId, roleName){
-  return getRoleNamesForUser(userId).includes(roleName);
-}
-function roleIndexOf(userId){
-  const names = getRoleNamesForUser(userId);
-  if(!names.length) return -1;
-  let idx=-1;
-  names.forEach(n=>{ const i=ROLE_HIERARCHY.indexOf(n); if(i>idx) idx=i; });
-  return idx;
-}
-function promoteUser(userId){
-  const idx = roleIndexOf(userId);
-  if(idx < 0 || idx >= ROLE_HIERARCHY.length-1) return false;
-  const from = ROLE_HIERARCHY[idx];
-  const to = ROLE_HIERARCHY[idx+1];
-  const fromRole = STATE.roles.find(r=>r.name===from);
-  const toRole = STATE.roles.find(r=>r.name===to);
-  if(!toRole) return false;
-  const urIndex = STATE.user_roles.findIndex(ur=>ur.userId===userId && ur.roleId===fromRole?.id);
-  if(urIndex !== -1) STATE.user_roles.splice(urIndex,1);
-  STATE.user_roles.push({ id: uid('ur'), userId, roleId: toRole.id });
-  return true;
-}
-function demoteUser(userId){
-  const idx = roleIndexOf(userId);
-  if(idx <= 0) return false;
-  const from = ROLE_HIERARCHY[idx];
-  const to = ROLE_HIERARCHY[idx-1];
-  const fromRole = STATE.roles.find(r=>r.name===from);
-  const toRole = STATE.roles.find(r=>r.name===to);
-  if(!toRole) return false;
-  const urIndex = STATE.user_roles.findIndex(ur=>ur.userId===userId && ur.roleId===fromRole?.id);
-  if(urIndex !== -1) STATE.user_roles.splice(urIndex,1);
-  STATE.user_roles.push({ id: uid('ur'), userId, roleId: toRole.id });
-  return true;
-}
-
-// -------------------- Plus/Minus totals --------------------
 function computeTotals(userId){
   const pluses = STATE.plusminusHistory.filter(p=>p.targetId===userId && p.delta>0).reduce((s,p)=>s+p.delta,0);
   const minuses = STATE.plusminusHistory.filter(p=>p.targetId===userId && p.delta<0).reduce((s,p)=>s+p.delta,0);
   return { pluses, minuses: Math.abs(minuses) };
 }
+function roleIndexOf(userId){
+  const names = getRoleNamesForUser(userId);
+  if (names.length===0) return -1;
+  // take highest role according to hierarchy
+  let idx = -1;
+  names.forEach(n=>{
+    const i = ROLE_HIERARCHY.indexOf(n);
+    if (i > idx) idx = i;
+  });
+  return idx;
+}
+function promoteUser(userId){
+  const idx = roleIndexOf(userId);
+  if (idx < 0 || idx >= ROLE_HIERARCHY.length-1) return false;
+  const targetRoleName = ROLE_HIERARCHY[idx+1];
+  // remove lower role (one of user's roles at idx) and add target
+  // simple approach: remove any role equal to ROLE_HIERARCHY[idx] and add target
+  const lowerRole = ROLE_HIERARCHY[idx];
+  const lowerRoleObj = STATE.roles.find(r=>r.name===lowerRole);
+  const targetRoleObj = STATE.roles.find(r=>r.name===targetRoleName);
+  if (!targetRoleObj) return false;
+  // remove one instance of lowerRole mapping
+  const urIndex = STATE.user_roles.findIndex(ur=>ur.userId===userId && ur.roleId===lowerRoleObj?.id);
+  if (urIndex !== -1) STATE.user_roles.splice(urIndex,1);
+  STATE.user_roles.push({ id: uid('ur'), userId, roleId: targetRoleObj.id });
+  return true;
+}
+function demoteUser(userId){
+  const idx = roleIndexOf(userId);
+  if (idx <= 0) return false;
+  const targetRoleName = ROLE_HIERARCHY[idx-1];
+  const currRole = ROLE_HIERARCHY[idx];
+  const currRoleObj = STATE.roles.find(r=>r.name===currRole);
+  const targetRoleObj = STATE.roles.find(r=>r.name===targetRoleName);
+  if (!targetRoleObj) return false;
+  // remove current role mapping (one) and add target
+  const urIndex = STATE.user_roles.findIndex(ur=>ur.userId===userId && ur.roleId===currRoleObj?.id);
+  if (urIndex !== -1) STATE.user_roles.splice(urIndex,1);
+  STATE.user_roles.push({ id: uid('ur'), userId, roleId: targetRoleObj.id });
+  return true;
+}
 
-// -------------------- Auto daily penalty processing --------------------
-function runAutoDailyPenalties(){
+// ---------- Auto-daily penalty ----------
+function runAutoDailyPenalties() {
   const now = Date.now();
+  // Ensure STATE.lastAutoRun set
   STATE.lastAutoRun = STATE.lastAutoRun || new Date(0).toISOString();
   const lastRun = new Date(STATE.lastAutoRun).getTime();
-  STATE.users.forEach(user=>{
+
+  // For each user: if user.lastActivity older than 24h, compute number of full days since max(user.lastAutoPenaltyAt or user.lastActivity or state.lastAutoRun)
+  STATE.users.forEach(user => {
     const lastActivity = user.lastActivity ? new Date(user.lastActivity).getTime() : 0;
     const lastPenaltyAt = user.lastAutoPenaltyAt ? new Date(user.lastAutoPenaltyAt).getTime() : lastActivity;
-    if(lastActivity >= now - 24*3600*1000) return; // active in last 24h -> skip
+    // we only apply for offline users (lastActivity < now - 24h)
+    if (lastActivity >= now - 24*3600*1000) return; // active within 24h -> no penalty
+
+    // start from lastPenaltyAt (or lastActivity)
     const start = Math.max(lastPenaltyAt, lastRun);
+    // compute full days between start and now
     const days = Math.floor((now - start) / (24*3600*1000));
-    if(days <= 0) return;
-    for(let d=0; d<days; d++){
+    if (days <= 0) return;
+    // apply 'days' penalties
+    for (let d=0; d<days; d++){
       const rec = { id: uid('pm'), actorId: 'system', targetId: user.id, delta: -1, reason: 'Brak aktywności (automatyczny minus)', at: new Date().toISOString() };
       STATE.plusminusHistory.push(rec);
     }
+    // update user's lastAutoPenaltyAt to now
     user.lastAutoPenaltyAt = new Date().toISOString();
   });
+
+  // update lastAutoRun
   STATE.lastAutoRun = new Date().toISOString();
+  // after adding penalties, check promotions/demotions
   autoApplyPromotionsAndDemotions();
-  saveState(STATE);
+  saveAndRefresh();
 }
 
-// run while page open
-setInterval(()=>{ if(STATE) runAutoDailyPenalties(); }, 60*1000);
+// run periodically (every minute) while page open
+setInterval(() => {
+  if (!STATE) return;
+  runAutoDailyPenalties();
+}, 60*1000);
 
-// -------------------- Auto promotions/demotions --------------------
+// ---------- Promotions & Demotions logic ----------
 function autoApplyPromotionsAndDemotions(){
   STATE.users.forEach(user=>{
     const totals = computeTotals(user.id);
-    if(totals.pluses >= 5){
-      const ok = promoteUser(user.id);
-      if(ok) STATE.plusminusHistory.push({ id: uid('pm'), actorId: 'system', targetId: user.id, delta: 0, reason: 'Automatyczny awans (pluses>=5)', at: new Date().toISOString() });
+    const pluses = totals.pluses;
+    const minuses = totals.minuses;
+    // promotion threshold
+    if (pluses >= 5) {
+      const promoted = promoteUser(user.id);
+      if (promoted) {
+        STATE.plusminusHistory.push({ id: uid('pm'), actorId: 'system', targetId: user.id, delta: 0, reason: 'Automatyczny awans (plusy>=5)', at: new Date().toISOString() });
+      }
     }
-    if(totals.minuses >= 3){
-      const ok = demoteUser(user.id);
-      if(ok) STATE.plusminusHistory.push({ id: uid('pm'), actorId: 'system', targetId: user.id, delta: 0, reason: 'Automatyczna degradacja (minuses>=3)', at: new Date().toISOString() });
+    // demotion threshold
+    if (minuses >= 3) {
+      const demoted = demoteUser(user.id);
+      if (demoted) {
+        STATE.plusminusHistory.push({ id: uid('pm'), actorId: 'system', targetId: user.id, delta: 0, reason: 'Automatyczna degradacja (minusy>=3)', at: new Date().toISOString() });
+      }
     }
   });
 }
 
-// -------------------- Rendering / UI --------------------
+// ---------- Rendering ----------
 function renderApp(){
   const app = document.getElementById('app');
   document.getElementById('userbox').innerHTML = CURRENT_USER ? `
     <div class="card" style="padding:10px;display:flex;gap:12px;align-items:center">
       <div>
         <strong>${escapeHtml(CURRENT_USER.displayName||CURRENT_USER.username)}</strong>
-        <div class="small muted">${getRoleNamesForUser(CURRENT_USER.id).join(', ') || '—'}</div>
+        <div class="small muted">${(getRoleNamesForUser(CURRENT_USER.id)||[]).join(', ') || '—'}</div>
       </div>
       <div style="margin-left:auto;display:flex;gap:8px">
         <button class="btn" onclick="renderPanel()">Panel</button>
@@ -262,25 +271,22 @@ function renderApp(){
     </div>
   ` : '';
 
-  if(!CURRENT_USER){ renderLogin(); return; }
+  if (!CURRENT_USER){
+    renderLogin();
+    return;
+  }
   renderPanel();
 }
 
-// -------------- Login view (with visible top button) --------------
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+// Login form
 function renderLogin(err){
   const app = document.getElementById('app');
   app.innerHTML = `
-    <div class="card" style="max-width:680px;margin:auto">
+    <div class="card" style="max-width:520px;margin:auto">
       <h2>Zaloguj się</h2>
-      <div class="small muted" style="margin-bottom:8px">
-        Użyj: <kbd>adminaccountowner</kbd> / <kbd>ownerpassword1245</kbd>
-      </div>
-
-      <!-- Widoczny przycisk logowania -->
-      <div style="margin-bottom:12px">
-        <button class="btn" style="width:100%" onclick="document.getElementById('loginForm').requestSubmit()">Zaloguj się</button>
-      </div>
-
+      <div class="small muted" style="margin-bottom:10px">Użyj: <code>adminaccountowner</code> / <code>ownerpassword1245</code></div>
       <form id="loginForm" class="form-row">
         <input id="loginUser" placeholder="Nazwa użytkownika" required />
         <input id="loginPass" placeholder="Hasło" type="password" required />
@@ -288,9 +294,7 @@ function renderLogin(err){
           <button class="btn" type="submit">Zaloguj</button>
         </div>
       </form>
-      <div id="loginErr" class="small" style="color:#fca5a5;margin-top:8px">${err||''}</div>
-      <hr style="margin-top:12px;border:none;border-top:1px solid rgba(255,255,255,0.03)">
-      <div class="small muted" style="margin-top:8px">Panel demo — wszystko działa lokalnie. Hasła są haszowane po stronie klienta (PBKDF2) w celach edukacyjnych.</div>
+      <div id="loginErr" class="small" style="color:#fca5a5">${err||''}</div>
     </div>
   `;
   document.getElementById('loginForm').addEventListener('submit', async (e)=>{
@@ -298,9 +302,10 @@ function renderLogin(err){
     const u = document.getElementById('loginUser').value.trim();
     const p = document.getElementById('loginPass').value;
     const user = (STATE.users||[]).find(x=>x.username === u);
-    if(!user){ renderLogin('Nieprawidłowy login lub hasło'); return; }
+    if (!user) { renderLogin('Nieprawidłowy login lub hasło'); return; }
     const ok = await verifyPassword(p, user.passwordHash);
-    if(!ok){ renderLogin('Nieprawidłowy login lub hasło'); return; }
+    if (!ok) { renderLogin('Nieprawidłowy login lub hasło'); return; }
+    // update lastActivity
     user.lastActivity = nowIso();
     saveState(STATE);
     CURRENT_USER = { id: user.id, username: user.username, displayName: user.displayName };
@@ -308,7 +313,7 @@ function renderLogin(err){
   });
 }
 
-// -------------- Panel (main) --------------
+// Main panel
 function renderPanel(){
   const app = document.getElementById('app');
   app.innerHTML = `
@@ -318,7 +323,7 @@ function renderPanel(){
           <nav>
             <button class="btn" onclick="showPage('users')">Użytkownicy</button>
             <button class="btn-ghost" onclick="showPage('roles')">Role</button>
-            <button class="btn-ghost" onclick="showPage('plusminus')">Plusy/Minusy</button>
+            <button class="btn-ghost" onclick="showPage('plusminus')">Plusy i minusy</button>
             <button class="btn-ghost" onclick="showPage('server')">Ustawienia serwera</button>
             <button class="btn-ghost" onclick="showPage('announcements')">Ogłoszenia</button>
             <button class="btn-ghost" onclick="showPage('audit')">Audit</button>
@@ -363,31 +368,33 @@ function renderQuickActions(){
 
 function renderServerSummary(){
   const el = document.getElementById('serverSummary');
-  if(!el) return;
+  if (!el) return;
   el.innerHTML = `<div><strong>${escapeHtml(STATE.settings.serverName||'—')}</strong></div><div class="small muted">${escapeHtml(STATE.settings.welcomeMessage||'—')}</div>`;
 }
 
-// -------------- Page routing --------------
-function showPage(page,opt){
+// ---------- Pages ----------
+function showPage(page, opt){
   const target = document.getElementById('pageArea');
-  if(page === 'users') return renderUsersPage(target,opt);
-  if(page === 'roles') return renderRolesPage(target);
-  if(page === 'plusminus') return renderPlusMinusPage(target);
-  if(page === 'server') return renderServerPage(target);
-  if(page === 'announcements') return renderAnnouncementsPage(target);
-  if(page === 'audit') return renderAuditPage(target);
-  target.innerHTML = '<div class="card">Strona nieznana</div>';
+  if (page === 'users') return renderUsersPage(target, opt);
+  if (page === 'roles') return renderRolesPage(target);
+  if (page === 'plusminus') return renderPlusMinusPage(target);
+  if (page === 'server') return renderServerPage(target);
+  if (page === 'announcements') return renderAnnouncementsPage(target);
+  if (page === 'audit') return renderAuditPage(target);
+  target.innerHTML = '<div>Strona nieznana</div>';
 }
 
-// -------------- Users page --------------
-function renderUsersPage(container,opt){
-  const canList = hasRole(CURRENT_USER.id,'support') || hasRole(CURRENT_USER.id,'administrator') || hasRole(CURRENT_USER.id,'vowner');
-  if(!canList) { container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania użytkowników.</div></div>`; return; }
-
+// Users page
+function renderUsersPage(container, opt){
+  const canList = hasRole(CURRENT_USER.id, 'support') || hasRole(CURRENT_USER.id, 'administrator') || hasRole(CURRENT_USER.id, 'vowner');
+  if (!canList){
+    container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania użytkowników.</div></div>`;
+    return;
+  }
   const rows = STATE.users.map(u=>{
     const totals = computeTotals(u.id);
     const onlineAgo = formatAgo(u.lastActivity);
-    const isOnline = (Date.now() - new Date(u.lastActivity).getTime()) < 5*60*1000;
+    const isOnline = (Date.now() - new Date(u.lastActivity).getTime()) < 5*60*1000; // considered online if active within 5m
     return `<tr>
       <td>${escapeHtml(u.username)}${u.id===CURRENT_USER.id? ' <span class="small muted">(Ty)</span>':''}</td>
       <td>${escapeHtml(u.displayName||'—')}</td>
@@ -403,7 +410,6 @@ function renderUsersPage(container,opt){
       </td>
     </tr>`;
   }).join('');
-
   container.innerHTML = `
     <div class="card">
       <h3>Zarządzanie użytkownikami</h3>
@@ -415,12 +421,16 @@ function renderUsersPage(container,opt){
       </table>
     </div>
   `;
-  if(opt === 'create') renderCreateUserForm(); else document.getElementById('createArea').innerHTML = `<div class="small muted">Aby utworzyć nowe konto, kliknij "Stwórz konto".</div>`;
+  if (opt === 'create') renderCreateUserForm();
+  else document.getElementById('createArea').innerHTML = `<div class="small muted">Aby utworzyć nowe konto, kliknij "Stwórz konto".</div>`;
 }
 
 function renderCreateUserForm(){
-  const canCreate = hasRole(CURRENT_USER.id,'vowner') || hasRole(CURRENT_USER.id,'administrator');
-  if(!canCreate){ document.getElementById('createArea').innerHTML = `<div class="small muted">Nie masz uprawnień do tworzenia kont.</div>`; return; }
+  const canCreate = hasRole(CURRENT_USER.id, 'vowner') || hasRole(CURRENT_USER.id, 'administrator');
+  if (!canCreate) {
+    document.getElementById('createArea').innerHTML = `<div class="small muted">Nie masz uprawnień do tworzenia kont.</div>`;
+    return;
+  }
   const rolesOptions = STATE.roles.map(r=>`<option value="${escapeHtml(r.name)}">${escapeHtml(r.name)}</option>`).join('');
   document.getElementById('createArea').innerHTML = `
     <form id="createUserForm" class="form-row" style="margin-bottom:12px">
@@ -440,21 +450,21 @@ function renderCreateUserForm(){
     const p = document.getElementById('newPassword').value;
     const disp = document.getElementById('newDisplay').value.trim() || u;
     const roleName = document.getElementById('newRole').value;
-    if((STATE.users||[]).some(x=>x.username===u)){ document.getElementById('createUserMsg').textContent = 'Użytkownik już istnieje'; return; }
+    if ((STATE.users||[]).some(x=>x.username===u)) { document.getElementById('createUserMsg').textContent = 'Użytkownik już istnieje'; return; }
     const id = uid('u');
     const hash = await hashPassword(p);
     STATE.users.push({ id, username: u, passwordHash: hash, displayName: disp, createdAt: new Date().toISOString(), lastActivity: new Date().toISOString(), lastAutoPenaltyAt: new Date().toISOString() });
     const roleObj = STATE.roles.find(r=>r.name===roleName);
-    if(roleObj) STATE.user_roles.push({ id: uid('ur'), userId: id, roleId: roleObj.id });
+    if (roleObj) STATE.user_roles.push({ id: uid('ur'), userId: id, roleId: roleObj.id });
     saveAndRefresh();
   });
 }
 
 function showEditUser(userId){
   const user = STATE.users.find(u=>u.id===userId);
-  if(!user) return alert('Użytkownik nie istnieje');
+  if (!user) return alert('Użytkownik nie istnieje');
   const canEdit = hasRole(CURRENT_USER.id,'administrator') || (CURRENT_USER.id===userId);
-  if(!canEdit) return alert('Brak uprawnień do edycji tego użytkownika');
+  if (!canEdit) return alert('Brak uprawnień do edycji tego użytkownika');
   const rolesOptions = STATE.roles.map(r=>`<option value="${escapeHtml(r.name)}">${escapeHtml(r.name)}</option>`).join('');
   const assigned = getRoleNamesForUser(userId);
   const container = document.getElementById('pageArea');
@@ -484,82 +494,40 @@ function showEditUser(userId){
     e.preventDefault();
     const disp = document.getElementById('editDisplay').value.trim();
     const newPass = document.getElementById('editPass').value;
-    if(disp) user.displayName = disp;
-    if(newPass) user.passwordHash = await hashPassword(newPass);
+    if (disp) user.displayName = disp;
+    if (newPass) user.passwordHash = await hashPassword(newPass);
     saveAndRefresh();
   });
 }
 
 function assignRoleToUser(userId, roleName){
-  if(!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień');
+  if (!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień');
   const role = STATE.roles.find(r=>r.name===roleName);
-  if(!role) return alert('Rola nie istnieje');
-  if(STATE.user_roles.some(ur=>ur.userId===userId && ur.roleId===role.id)) return alert('Użytkownik już ma tę rolę');
+  if (!role) return alert('Rola nie istnieje');
+  if (STATE.user_roles.some(ur=>ur.userId===userId && ur.roleId===role.id)) return alert('Użytkownik już ma tę rolę');
   STATE.user_roles.push({ id: uid('ur'), userId, roleId: role.id });
   saveAndRefresh();
 }
 
 function deleteUser(userId){
-  if(!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może usuwać użytkowników');
-  if(userId === CURRENT_USER.id) return alert('Nie możesz usunąć własnego konta');
+  if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może usuwać użytkowników');
+  if (userId === CURRENT_USER.id) return alert('Nie możesz usunąć własnego konta');
   STATE.users = STATE.users.filter(u=>u.id!==userId);
   STATE.user_roles = STATE.user_roles.filter(ur=>ur.userId!==userId);
+  // remove plusminus entries
   STATE.plusminusHistory = STATE.plusminusHistory.filter(pm=>pm.targetId !== userId);
   saveAndRefresh();
 }
 
-// -------------- Roles page --------------
-function renderRolesPage(container){
-  const canView = hasRole(CURRENT_USER.id,'support') || hasRole(CURRENT_USER.id,'administrator') || hasRole(CURRENT_USER.id,'vowner');
-  if(!canView){ container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania ról.</div></div>`; return; }
-  const rows = STATE.roles.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td><button class="btn-ghost" onclick="showRoleUsers('${r.id}')">Pokaż użytkowników</button></td></tr>`).join('');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Role</h3>
-      <div class="small muted">Tworzyć role może: <strong>vowner</strong></div>
-      ${hasRole(CURRENT_USER.id,'vowner') ? `
-        <form id="createRoleForm" class="form-row" style="margin-bottom:12px">
-          <input id="newRoleName" placeholder="nazwa roli" required />
-          <div style="width:100%;display:flex;justify-content:flex-end"><button class="btn" type="submit">Stwórz rolę</button></div>
-        </form>` : ''}
-      <table><thead><tr><th>Nazwa</th><th>Akcje</th></tr></thead><tbody>${rows}</tbody></table>
-    </div>
-  `;
-  const form = document.getElementById('createRoleForm');
-  if(form) form.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    const name = document.getElementById('newRoleName').value.trim();
-    if(!name) return;
-    if(STATE.roles.some(r=>r.name===name)) return alert('Rola już istnieje');
-    STATE.roles.push({ id: uid('r'), name });
-    saveAndRefresh();
-  });
-}
-
-function showRoleUsers(roleId){
-  const role = STATE.roles.find(r=>r.id===roleId);
-  if(!role) return;
-  const userIds = STATE.user_roles.filter(ur=>ur.roleId===roleId).map(ur=>ur.userId);
-  const users = STATE.users.filter(u=>userIds.includes(u.id));
-  const container = document.getElementById('pageArea');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Użytkownicy z rolą: ${escapeHtml(role.name)}</h3>
-      <ul>${users.map(u=>`<li>${escapeHtml(u.username)} — ${escapeHtml(u.displayName||'')}</li>`).join('')}</ul>
-      <div style="margin-top:10px"><button class="btn-ghost" onclick="renderPanel()">Powrót</button></div>
-    </div>
-  `;
-}
-
-// -------------- Plus/Minus page --------------
+// Plus/Minus page
 function renderPlusMinusPage(container){
-  if(!hasRole(CURRENT_USER.id,'vowner') && !hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'support')){
+  if (!hasRole(CURRENT_USER.id,'vowner') && !hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'support')){
     container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do tej sekcji.</div></div>`; return;
   }
   const usersOptions = STATE.users.map(u=>`<option value="${u.id}">${escapeHtml(u.username)}</option>`).join('');
   const historyRows = STATE.plusminusHistory.slice().reverse().map(h=>{
-    const actor = h.actorId === 'system' ? 'SYSTEM' : (STATE.users.find(u=>u.id===h.actorId)?.username || h.actorId);
-    const target = STATE.users.find(u=>u.id===h.targetId)?.username || h.targetId;
+    const actor = h.actorId === 'system' ? 'SYSTEM' : (findUserById(h.actorId)?.username || h.actorId);
+    const target = findUserById(h.targetId)?.username || h.targetId;
     return `<div class="history-row"><strong>${escapeHtml(target)}</strong> — ${formatAgo(h.at)} — <span class="${h.delta>0?'ok':'danger'}">${h.delta>0?'+':''}${h.delta}</span> — ${escapeHtml(h.reason)} <span class="small muted">(${escapeHtml(actor)})</span></div>`;
   }).join('');
   container.innerHTML = `
@@ -577,21 +545,24 @@ function renderPlusMinusPage(container){
   `;
   document.getElementById('pmForm').addEventListener('submit',(e)=>{
     e.preventDefault();
-    if(!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może przyznawać ręcznie plusy/minusy');
+    if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może przyznawać ręcznie plusy/minusy');
     const targetId = document.getElementById('pmTarget').value;
     const delta = Number(document.getElementById('pmDelta').value);
     const reason = document.getElementById('pmReason').value.trim() || (delta>0 ? 'Ręczny plus' : 'Ręczny minus');
     const rec = { id: uid('pm'), actorId: CURRENT_USER.id, targetId, delta, reason, at: new Date().toISOString() };
     STATE.plusminusHistory.push(rec);
+    // after adding, check thresholds
     autoApplyPromotionsAndDemotions();
     saveAndRefresh();
   });
 }
 
-// -------------- Announcements --------------
+// Announcements
 function renderAnnouncementsPage(container){
+  const canView = true;
   const canEdit = hasRole(CURRENT_USER.id,'vowner');
-  const list = STATE.announcements.slice().reverse().map(a=>`<div class="announce"><div style="display:flex;justify-content:space-between"><strong>${escapeHtml(a.title)}</strong><span class="small muted">${formatAgo(a.at)}</span></div><div class="small">${escapeHtml(a.body)}</div><div class="small muted">autor: ${escapeHtml(STATE.users.find(u=>u.id===a.authorId)?.username||a.authorId)}</div></div>`).join('');
+  if (!canView) return;
+  const list = STATE.announcements.slice().reverse().map(a=>`<div class="announce"><div style="display:flex;justify-content:space-between"><strong>${escapeHtml(a.title)}</strong><span class="small muted">${formatAgo(a.at)}</span></div><div class="small">${escapeHtml(a.body)}</div><div class="small muted">autor: ${escapeHtml(findUserById(a.authorId)?.username||a.authorId)}</div></div>`).join('');
   container.innerHTML = `
     <div class="card">
       <h3>Ogłoszenia</h3>
@@ -606,21 +577,64 @@ function renderAnnouncementsPage(container){
     </div>
   `;
   const f = document.getElementById('announceForm');
-  if(f) f.addEventListener('submit',(e)=>{
+  if (f) f.addEventListener('submit',(e)=>{
     e.preventDefault();
-    if(!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może publikować ogłoszenia');
+    if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może publikować ogłoszenia');
     const title = document.getElementById('annTitle').value.trim();
     const body = document.getElementById('annBody').value.trim();
-    if(!title || !body) return alert('Wypełnij tytuł i treść');
+    if (!title || !body) return alert('Wypełnij tytuł i treść');
     STATE.announcements.push({ id: uid('ann'), authorId: CURRENT_USER.id, title, body, at: new Date().toISOString() });
     saveAndRefresh();
   });
 }
 
-// -------------- Server settings --------------
+// Roles page
+function renderRolesPage(container){
+  const canView = hasRole(CURRENT_USER.id, 'support') || hasRole(CURRENT_USER.id, 'administrator') || hasRole(CURRENT_USER.id, 'vowner');
+  if (!canView) { container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania ról.</div></div>`; return; }
+  const rows = STATE.roles.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td><button class="btn-ghost" onclick="showRoleUsers('${r.id}')">Pokaż użytkowników</button></td></tr>`).join('');
+  container.innerHTML = `
+    <div class="card">
+      <h3>Role</h3>
+      <div class="small muted">Tworzyć role może: <strong>vowner</strong></div>
+      ${hasRole(CURRENT_USER.id,'vowner') ? `
+        <form id="createRoleForm" class="form-row" style="margin-bottom:12px">
+          <input id="newRoleName" placeholder="nazwa roli" required />
+          <div style="width:100%;display:flex;justify-content:flex-end"><button class="btn" type="submit">Stwórz rolę</button></div>
+        </form>` : ''}
+      <table><thead><tr><th>Nazwa</th><th>Akcje</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>
+  `;
+  const form = document.getElementById('createRoleForm');
+  if (form) form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const name = document.getElementById('newRoleName').value.trim();
+    if (!name) return;
+    if (STATE.roles.some(r=>r.name===name)) return alert('Rola już istnieje');
+    STATE.roles.push({ id: uid('r'), name });
+    saveAndRefresh();
+  });
+}
+
+function showRoleUsers(roleId){
+  const role = STATE.roles.find(r=>r.id===roleId);
+  if (!role) return;
+  const userIds = STATE.user_roles.filter(ur=>ur.roleId===roleId).map(ur=>ur.userId);
+  const users = STATE.users.filter(u=>userIds.includes(u.id));
+  const container = document.getElementById('pageArea');
+  container.innerHTML = `
+    <div class="card">
+      <h3>Użytkownicy z rolą: ${escapeHtml(role.name)}</h3>
+      <ul>${users.map(u=>`<li>${escapeHtml(u.username)} — ${escapeHtml(u.displayName||'')}</li>`).join('')}</ul>
+      <div style="margin-top:10px"><button class="btn-ghost" onclick="renderPanel()">Powrót</button></div>
+    </div>
+  `;
+}
+
+// Server settings
 function renderServerPage(container){
   const canView = hasRole(CURRENT_USER.id,'support') || hasRole(CURRENT_USER.id,'administrator') || hasRole(CURRENT_USER.id,'vowner');
-  if(!canView) return container.innerHTML = `<div class="card"><div class="small">Brak uprawnień</div></div>`;
+  if (!canView) return container.innerHTML = `<div class="card"><div class="small">Brak uprawnień</div></div>`;
   const s = STATE.settings || {};
   container.innerHTML = `
     <div class="card">
@@ -636,18 +650,18 @@ function renderServerPage(container){
   `;
   document.getElementById('serverForm').addEventListener('submit',(e)=>{
     e.preventDefault();
-    if(!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień do zapisu ustawień');
+    if (!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień do zapisu ustawień');
     STATE.settings.serverName = document.getElementById('svName').value;
     STATE.settings.welcomeMessage = document.getElementById('svWelcome').value;
     saveAndRefresh();
   });
 }
 
-// -------------- Audit --------------
+// Audit
 function renderAuditPage(container){
   const rows = STATE.plusminusHistory.slice().reverse().map(h=>{
-    const actor = h.actorId === 'system' ? 'SYSTEM' : (STATE.users.find(u=>u.id===h.actorId)?.username || h.actorId);
-    const target = STATE.users.find(u=>u.id===h.targetId)?.username || h.targetId;
+    const actor = h.actorId === 'system' ? 'SYSTEM' : (findUserById(h.actorId)?.username || h.actorId);
+    const target = findUserById(h.targetId)?.username || h.targetId;
     return `<tr><td>${escapeHtml(target)}</td><td>${escapeHtml(actor)}</td><td>${formatAgo(h.at)}</td><td>${h.delta>0? '+'+h.delta: h.delta}</td><td>${escapeHtml(h.reason)}</td></tr>`;
   }).join('');
   container.innerHTML = `
@@ -658,23 +672,23 @@ function renderAuditPage(container){
   `;
 }
 
-// -------------- Manual promote/demote --------------
+// ---------- Manual promote/demote ----------
 function manualPromote(userId){
-  if(!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner');
+  if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner');
   const ok = promoteUser(userId);
-  if(!ok) return alert('Nie można awansować (już najwyżej lub brak roli)');
+  if (!ok) return alert('Nie można awansować (już najwyżej lub brak roli)');
   STATE.plusminusHistory.push({ id: uid('pm'), actorId: CURRENT_USER.id, targetId: userId, delta: 0, reason: 'Ręczny awans (vowner)', at: new Date().toISOString() });
   saveAndRefresh();
 }
 function manualDemote(userId){
-  if(!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner');
+  if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner');
   const ok = demoteUser(userId);
-  if(!ok) return alert('Nie można zdegradować (już najniżej)');
+  if (!ok) return alert('Nie można zdegradować (już najniżej)');
   STATE.plusminusHistory.push({ id: uid('pm'), actorId: CURRENT_USER.id, targetId: userId, delta: 0, reason: 'Ręczna degradacja (vowner)', at: new Date().toISOString() });
   saveAndRefresh();
 }
 
-// -------------- Export / Import --------------
+// ---------- Export / Import ----------
 function downloadState(){
   const a = document.createElement('a');
   a.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(STATE,null,2));
@@ -687,42 +701,40 @@ function restoreState(){
   input.accept = 'application/json';
   input.addEventListener('change', (e)=>{
     const f = e.target.files[0];
-    if(!f) return;
+    if (!f) return;
     const reader = new FileReader();
-    reader.onload = (ev)=>{
-      try{
+    reader.onload = (ev) => {
+      try {
         const parsed = JSON.parse(ev.target.result);
-        if(!Array.isArray(parsed.users) || !Array.isArray(parsed.roles)) return alert('Plik nieprawidłowy');
+        if (!Array.isArray(parsed.users) || !Array.isArray(parsed.roles)) return alert('Plik nieprawidłowy');
         STATE = parsed;
         saveAndRefresh();
-      }catch(err){ alert('Błąd parsowania JSON'); }
+      } catch(err) { alert('Błąd parsowania JSON'); }
     };
     reader.readAsText(f);
   });
   input.click();
 }
 
-// -------------- Misc: save & refresh --------------
-function saveAndRefresh(){ saveState(STATE); renderApp(); }
-
-// -------------- Init --------------
+// ---------- Init ----------
 async function init(){
   STATE = await seedIfNeeded();
+  STATE.users = STATE.users||[];
+  STATE.roles = STATE.roles||[];
+  STATE.user_roles = STATE.user_roles||[];
+  STATE.plusminusHistory = STATE.plusminusHistory||[];
+  STATE.announcements = STATE.announcements||[];
+  STATE.settings = STATE.settings||{};
+
+  // current user persisted? For privacy, do not auto-login; require manual login
   CURRENT_USER = null;
-  // ensure arrays present
-  STATE.users = STATE.users || [];
-  STATE.roles = STATE.roles || [];
-  STATE.user_roles = STATE.user_roles || [];
-  STATE.plusminusHistory = STATE.plusminusHistory || [];
-  STATE.announcements = STATE.announcements || [];
-  STATE.settings = STATE.settings || {};
-  // run auto penalties once
+  // Run auto-penalties once at init to catch up while closed
   runAutoDailyPenalties();
   renderApp();
 }
 init();
 
-// -------------- Logout --------------
+// ---------- Misc ----------
 function logout(){ CURRENT_USER = null; renderApp(); }
 
 </script>
