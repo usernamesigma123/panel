@@ -1,526 +1,323 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Panel administracyjny — single file</title>
-<style>
-  :root{--bg:#0f1724;--card:#0b1220;--accent:#2563eb;--muted:#94a3b8;--ok:#16a34a;--danger:#ef4444}
-  *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
-  body{margin:0;background:linear-gradient(180deg,#071023 0%, #07132a 100%);color:#e6eef8;min-height:100vh}
-  .wrap{max-width:1100px;margin:28px auto;padding:20px}
-  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-  h1{margin:0;font-size:20px}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-  .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-  input,select,button,textarea{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none}
-  input::placeholder{color:var(--muted)}
-  button{cursor:pointer;border:none}
-  .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px}
-  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
-  .small{font-size:13px;color:var(--muted)}
-  nav button{margin-right:8px}
-  table{width:100%;border-collapse:collapse;margin-top:12px}
-  th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
-  th{font-size:13px;color:var(--muted)}
-  .role-pill{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;margin-right:6px}
-  .danger{background:linear-gradient(180deg,#7f1d1d,#b91c1c);color:white}
-  .ok{background:linear-gradient(180deg,#166534,#059669);color:white}
-  .muted{color:var(--muted)}
-  .flex{display:flex;gap:8px;align-items:center}
-  .cols{display:grid;grid-template-columns:1fr 370px;gap:12px}
-  @media(max-width:900px){.cols{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}nav{margin-top:8px}}
-  footer{margin-top:18px;color:var(--muted);font-size:13px}
-</style>
+  <meta charset="UTF-8">
+  <title>Panel Administracyjny (LocalStorage)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #f1f1f1;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #4da6ff;
+    }
+    .hidden { display: none; }
+    .card {
+      background: #2a2a2a;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+    input, select, button, textarea {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+    input, select, textarea {
+      width: calc(100% - 20px);
+      background: #3a3a3a;
+      color: white;
+    }
+    button {
+      background: #4da6ff;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #1e90ff;
+    }
+    nav button { margin-right: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 6px;
+      text-align: center;
+    }
+    .announcement {
+      background: #333;
+      padding: 10px;
+      border-left: 5px solid #4da6ff;
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Panel administracyjny (local)</h1>
-      <div class="small">Zapis lokalny w przeglądarce — wszystkie zmiany zostają.</div>
+<div class="container">
+  <h1>Panel Administracyjny</h1>
+
+  <!-- Sekcja logowania -->
+  <div id="login-section">
+    <h2>Logowanie</h2>
+    <button onclick="document.getElementById('login-form').requestSubmit()" style="width:100%;margin-bottom:10px;font-size:18px;">Zaloguj się</button>
+    <form id="login-form">
+      <input type="text" id="login-username" placeholder="Login" required>
+      <input type="password" id="login-password" placeholder="Hasło" required>
+      <button type="submit">Zaloguj</button>
+    </form>
+    <p id="login-error" style="color:red;"></p>
+  </div>
+
+  <!-- Sekcja panelu -->
+  <div id="panel-section" class="hidden">
+    <nav>
+      <button onclick="showTab('users')">Użytkownicy</button>
+      <button onclick="showTab('plusyminusy')">Plusy/Minusy</button>
+      <button onclick="showTab('announcements')">Ogłoszenia</button>
+      <button onclick="logout()" style="background:red;">Wyloguj</button>
+    </nav>
+
+    <!-- Zakładka użytkowników -->
+    <div id="tab-users" class="hidden card">
+      <h2>Zarządzanie użytkownikami</h2>
+      <div>
+        <input id="new-username" placeholder="Login nowego użytkownika">
+        <input id="new-displayname" placeholder="Wyświetlana nazwa">
+        <select id="new-role">
+          <option value="support">Support</option>
+          <option value="moderator">Moderator</option>
+          <option value="administrator">Administrator</option>
+        </select>
+        <button onclick="addUser()">Dodaj użytkownika</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Login</th>
+            <th>Nazwa</th>
+            <th>Rola</th>
+            <th>Plusy</th>
+            <th>Minusy</th>
+            <th>Ostatnia aktywność</th>
+            <th>Akcje</th>
+          </tr>
+        </thead>
+        <tbody id="users-table"></tbody>
+      </table>
     </div>
-    <div id="userbox"></div>
-  </header>
 
-  <div id="app"></div>
+    <!-- Zakładka plusów i minusów -->
+    <div id="tab-plusyminusy" class="hidden card">
+      <h2>System Plusów i Minusów</h2>
+      <div>
+        <select id="pm-user"></select>
+        <button onclick="addPlus()">Dodaj plusa</button>
+        <button onclick="addMinus()">Dodaj minusa</button>
+      </div>
+      <p>Minusy automatycznie przyznawane za 1 dzień nieaktywności.</p>
+    </div>
 
-  <footer class="small">Seed ról: <strong>support</strong>, <strong>moderator</strong>, <strong>administrator</strong>, <strong>vowner</strong>. Konto owner: <code>xd</code> / <code>xd</code></footer>
+    <!-- Zakładka ogłoszeń -->
+    <div id="tab-announcements" class="hidden card">
+      <h2>Ogłoszenia</h2>
+      <textarea id="announcement-text" placeholder="Treść ogłoszenia"></textarea>
+      <button onclick="addAnnouncement()">Dodaj ogłoszenie</button>
+      <div id="announcements-list"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-/*
- Single-file admin panel (client-only) with persistence in localStorage.
- Password hashing: Web Crypto PBKDF2+SHA-256, stored as base64(salt)$base64(hash)
- Data in localStorage under 'admin-panel-v1'
- Roles-based permissions applied (simple)
-*/
+  // ------------------ Dane globalne ------------------
+  let data = JSON.parse(localStorage.getItem('panelData')) || {
+    users: [
+      {username:'adminaccountowner', display:'Owner', role:'vowner', plusy:0, minusy:0, lastActive:Date.now()}
+    ],
+    announcements: []
+  };
 
-const STORAGE_KEY = 'admin-panel-v1';
-
-// ---------- Crypto helpers (Web Crypto) ----------
-async function genSalt(len = 16) {
-  const arr = crypto.getRandomValues(new Uint8Array(len));
-  return btoa(String.fromCharCode(...arr));
-}
-async function derivePasswordKey(password, saltB64, iterations = 100_000) {
-  const enc = new TextEncoder();
-  const passKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
-  const salt = Uint8Array.from(atob(saltB64), c=>c.charCodeAt(0));
-  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations, hash:'SHA-256'}, passKey, 256);
-  const hash = new Uint8Array(bits);
-  return btoa(String.fromCharCode(...hash));
-}
-async function hashPassword(password) {
-  const salt = await genSalt(16);
-  const hash = await derivePasswordKey(password, salt);
-  return salt + '$' + hash;
-}
-async function verifyPassword(password, stored) {
-  if(!stored) return false;
-  const [salt, hash] = stored.split('$');
-  const tryHash = await derivePasswordKey(password, salt);
-  return tryHash === hash;
-}
-
-// ---------- Storage (localStorage) ----------
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return null;
-  try { return JSON.parse(raw); } catch(e){ return null; }
-}
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// ---------- Seed initial DB if empty ----------
-async function seedIfNeeded() {
-  let s = loadState();
-  if (s) return s;
-  // default roles
-  const roles = ['support','moderator','administrator','vowner'].map((name, idx) => ({ id: 'r_'+idx, name }));
-  // seed owner user
-  const ownerUsername = 'adminaccountowner';
-  const ownerPlain = 'ownerpassword1245';
-  const ownerId = 'u_owner';
-  const ownerHash = await hashPassword(ownerPlain);
-  const users = [{ id: ownerId, username: ownerUsername, passwordHash: ownerHash, displayName: 'Owner', createdAt: new Date().toISOString() }];
-  const user_roles = [{ id: 'ur_owner_v', userId: ownerId, roleId: roles.find(r=>r.name==='vowner').id }];
-  const settings = { serverName: 'Mój serwer', welcomeMessage: 'Witaj!' };
-  const state = { users, roles, user_roles, settings, createdAt: new Date().toISOString() };
-  saveState(state);
-  return state;
-}
-
-// ---------- App state ----------
-let STATE = null;
-let CURRENT_USER = null; // {id, username, displayName}
-
-// ---------- Utilities ----------
-function uid(prefix='id') { return prefix + '_' + Math.random().toString(36).slice(2,10); }
-function getRoleNamesForUser(userId) {
-  const roleIds = (STATE.user_roles||[]).filter(ur=>ur.userId===userId).map(ur=>ur.roleId);
-  return (STATE.roles||[]).filter(r=>roleIds.includes(r.id)).map(r=>r.name);
-}
-function hasRole(userId, roleName) {
-  return getRoleNamesForUser(userId).includes(roleName);
-}
-function saveAndRefresh() {
-  saveState(STATE);
-  renderApp();
-}
-
-// ---------- UI Rendering ----------
-function renderApp() {
-  const app = document.getElementById('app');
-  document.getElementById('userbox').innerHTML = CURRENT_USER ? `
-    <div class="card" style="padding:10px;display:flex;gap:8px;align-items:center">
-      <div><strong>${escapeHtml(CURRENT_USER.displayName||CURRENT_USER.username)}</strong><div class="small muted">${getRoleNamesForUser(CURRENT_USER.id).join(', ')||'—'}</div></div>
-      <div style="margin-left:12px">
-        <button class="btn" onclick="renderPanel()">Panel</button>
-        <button class="btn-ghost" onclick="logout()">Wyloguj</button>
-      </div>
-    </div>
-  ` : '';
-
-  if (!CURRENT_USER) {
-    renderLogin();
-    return;
+  function saveData(){
+    localStorage.setItem('panelData', JSON.stringify(data));
   }
-  renderPanel();
-}
 
-function renderLogin(errMsg) {
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <div class="card" style="max-width:520px;margin:auto">
-      <h2>Zaloguj się</h2>
-      <div class="small muted" style="margin-bottom:10px">Użyj: <code>adminaccountowner</code> / <code>ownerpassword1245</code></div>
-      <form id="loginForm" class="form-row">
-        <input id="loginUser" placeholder="Nazwa użytkownika" required />
-        <input id="loginPass" placeholder="Hasło" type="password" required />
-        <div style="width:100%;display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn" type="submit">Zaloguj</button>
-        </div>
-      </form>
-      <div id="loginErr" class="small" style="color:#fca5a5">${errMsg||''}</div>
-    </div>
-  `;
-  document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  // ------------------ Logowanie ------------------
+  document.getElementById('login-form').addEventListener('submit', function(e){
     e.preventDefault();
-    const u = document.getElementById('loginUser').value.trim();
-    const p = document.getElementById('loginPass').value;
-    const user = (STATE.users||[]).find(x=>x.username === u);
-    if (!user) { renderLogin('Nieprawidłowy login lub hasło'); return; }
-    const ok = await verifyPassword(p, user.passwordHash);
-    if (!ok) { renderLogin('Nieprawidłowy login lub hasło'); return; }
-    CURRENT_USER = { id: user.id, username: user.username, displayName: user.displayName };
-    renderApp();
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+    if(username === 'adminaccountowner' && password === 'ownerpassword1245'){
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('panel-section').classList.remove('hidden');
+      refreshUsersTable();
+      refreshPMUserList();
+      refreshAnnouncements();
+    } else {
+      document.getElementById('login-error').innerText = 'Nieprawidłowy login lub hasło!';
+    }
   });
-}
 
-// escape helper
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-
-// ---------- Main Dashboard / Panel ----------
-function renderPanel() {
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <div class="cols">
-      <div>
-        <div class="card">
-          <nav>
-            <button class="btn" onclick="showPage('users')">Użytkownicy</button>
-            <button class="btn-ghost" onclick="showPage('roles')">Role</button>
-            <button class="btn-ghost" onclick="showPage('server')">Ustawienia serwera</button>
-            <button class="btn-ghost" onclick="showPage('audit')">Audit</button>
-          </nav>
-        </div>
-
-        <div id="pageArea" style="margin-top:12px"></div>
-      </div>
-
-      <div>
-        <div class="card">
-          <h3>Informacje</h3>
-          <div class="small muted">Twoje konto: <strong>${escapeHtml(CURRENT_USER.username)}</strong></div>
-          <div class="small muted">Role: <strong>${getRoleNamesForUser(CURRENT_USER.id).join(', ')||'—'}</strong></div>
-          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:10px 0">
-          <div class="small">Szybkie akcje:</div>
-          <div style="margin-top:8px" id="quickActions"></div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h4>Ustawienia serwera</h4>
-          <div class="small muted" id="serverSummary"></div>
-        </div>
-      </div>
-    </div>
-  `;
-  renderQuickActions();
-  renderServerSummary();
-  showPage('users');
-}
-
-function renderQuickActions(){
-  const qa = document.getElementById('quickActions');
-  const canCreate = hasRole(CURRENT_USER.id, 'vowner') || hasRole(CURRENT_USER.id, 'administrator');
-  qa.innerHTML = `
-    ${canCreate ? '<button class="btn" onclick="showPage(\'users\',\'create\')">Stwórz konto</button>' : ''}
-    <button class="btn-ghost" onclick="downloadState()">Pobierz kopię (JSON)</button>
-    <button class="btn-ghost" onclick="restoreState()">Przywróć z JSON</button>
-  `;
-}
-
-// ---------- Pages ----------
-function showPage(page, opt) {
-  const target = document.getElementById('pageArea');
-  if (page === 'users') return renderUsersPage(target, opt);
-  if (page === 'roles') return renderRolesPage(target);
-  if (page === 'server') return renderServerPage(target);
-  if (page === 'audit') return renderAuditPage(target);
-  target.innerHTML = '<div>Strona nieznana</div>';
-}
-
-// Users page
-function renderUsersPage(container, opt) {
-  const canList = hasRole(CURRENT_USER.id, 'support') || hasRole(CURRENT_USER.id, 'administrator') || hasRole(CURRENT_USER.id, 'vowner');
-  if (!canList) {
-    container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania użytkowników.</div></div>`;
-    return;
+  function logout(){
+    document.getElementById('panel-section').classList.add('hidden');
+    document.getElementById('login-section').classList.remove('hidden');
   }
-  const usersHtml = (STATE.users||[]).map(u=>{
-    const roles = getRoleNamesForUser(u.id);
-    return `<tr>
-      <td>${escapeHtml(u.username)}${u.id===CURRENT_USER.id? ' <span class="small muted">(Ty)</span>':''}</td>
-      <td>${escapeHtml(u.displayName||'—')}</td>
-      <td>${new Date(u.createdAt).toLocaleString()}</td>
-      <td>${roles.map(r=>`<span class="role-pill">${r}</span>`).join('')}</td>
-      <td>
-        <div class="flex">
-          <button class="btn-ghost" onclick="showEditUser('${u.id}')">Edytuj</button>
-          ${hasRole(CURRENT_USER.id,'vowner') && u.id!==CURRENT_USER.id ? `<button class="danger" onclick="deleteUser('${u.id}')">Usuń</button>` : ''}
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
 
-  container.innerHTML = `
-    <div class="card">
-      <h3>Zarządzanie użytkownikami</h3>
-      <div class="small muted" style="margin-bottom:10px">Tworzyć mogą: <strong>vowner</strong> i <strong>administrator</strong></div>
-
-      <div id="createArea"></div>
-
-      <table>
-        <thead><tr><th>Username</th><th>Display</th><th>Utworzono</th><th>Role</th><th>Akcje</th></tr></thead>
-        <tbody>${usersHtml}</tbody>
-      </table>
-    </div>
-  `;
-
-  if (opt === 'create') {
-    renderCreateUserForm();
-  } else {
-    document.getElementById('createArea').innerHTML = `<div class="small muted">Aby utworzyć nowe konto, kliknij "Stwórz konto".</div>`;
+  // ------------------ Zakładki ------------------
+  function showTab(tab){
+    document.querySelectorAll('#panel-section > div').forEach(div=>{
+      if(div.id.startsWith('tab-')) div.classList.add('hidden');
+    });
+    document.getElementById('tab-'+tab).classList.remove('hidden');
   }
-}
 
-function renderCreateUserForm() {
-  const canCreate = hasRole(CURRENT_USER.id, 'vowner') || hasRole(CURRENT_USER.id, 'administrator');
-  if (!canCreate) {
-    document.getElementById('createArea').innerHTML = `<div class="small muted">Nie masz uprawnień do tworzenia kont.</div>`;
-    return;
+  // ------------------ Użytkownicy ------------------
+  function addUser(){
+    const username = document.getElementById('new-username').value.trim();
+    const display = document.getElementById('new-displayname').value.trim() || username;
+    const role = document.getElementById('new-role').value;
+
+    if(!username) return alert('Podaj login użytkownika');
+    if(data.users.find(u=>u.username===username)) return alert('Taki użytkownik już istnieje!');
+
+    data.users.push({username, display, role, plusy:0, minusy:0, lastActive:Date.now()});
+    saveData();
+    refreshUsersTable();
+    refreshPMUserList();
   }
-  const rolesOptions = STATE.roles.map(r=>`<option value="${escapeHtml(r.name)}">${escapeHtml(r.name)}</option>`).join('');
-  document.getElementById('createArea').innerHTML = `
-    <form id="createUserForm" class="form-row" style="margin-bottom:12px">
-      <input id="newUsername" placeholder="username" required />
-      <input id="newPassword" placeholder="password" required />
-      <input id="newDisplay" placeholder="displayName" />
-      <select id="newRole">${rolesOptions}</select>
-      <div style="width:100%;display:flex;justify-content:flex-end">
-        <button class="btn" type="submit">Stwórz konto</button>
-      </div>
-    </form>
-    <div id="createUserMsg" class="small muted"></div>
-  `;
-  document.getElementById('createUserForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const u = document.getElementById('newUsername').value.trim();
-    const p = document.getElementById('newPassword').value;
-    const disp = document.getElementById('newDisplay').value.trim() || u;
-    const roleName = document.getElementById('newRole').value;
-    if ((STATE.users||[]).some(x=>x.username===u)) { document.getElementById('createUserMsg').textContent = 'Użytkownik już istnieje'; return; }
-    const id = uid('u');
-    const hash = await hashPassword(p);
-    STATE.users.push({ id, username: u, passwordHash: hash, displayName: disp, createdAt: new Date().toISOString() });
-    const roleObj = STATE.roles.find(r=>r.name===roleName);
-    if (roleObj) STATE.user_roles.push({ id: uid('ur'), userId: id, roleId: roleObj.id });
-    saveAndRefresh();
-  });
-}
 
-// Edit user modal-like
-function showEditUser(userId) {
-  const user = STATE.users.find(u=>u.id===userId);
-  if (!user) return alert('Użytkownik nie istnieje');
-  const canEdit = hasRole(CURRENT_USER.id,'administrator') || (CURRENT_USER.id===userId);
-  if (!canEdit) return alert('Brak uprawnień do edycji tego użytkownika');
-
-  const rolesOptions = STATE.roles.map(r=>`<option value="${escapeHtml(r.name)}">${escapeHtml(r.name)}</option>`).join('');
-  const assigned = getRoleNamesForUser(userId);
-
-  const container = document.getElementById('pageArea');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Edytuj użytkownika — ${escapeHtml(user.username)}</h3>
-      <form id="editUserForm" class="form-row">
-        <input id="editDisplay" placeholder="displayName" value="${escapeHtml(user.displayName||'')}" />
-        <input id="editPass" placeholder="Nowe hasło (opcjonalnie)" type="password" />
-        <select id="roleSelect">${rolesOptions}</select>
-        <div style="width:100%;display:flex;justify-content:flex-end">
-          <button class="btn" type="submit">Zapisz</button>
-          <button class="btn-ghost" type="button" onclick="renderPanel()">Anuluj</button>
-        </div>
-      </form>
-      <div style="margin-top:12px">
-        <div class="small muted">Role przypisane: ${assigned.map(r=>`<span class="role-pill">${r}</span>`).join('')}</div>
-        <div style="margin-top:8px">
-          ${hasRole(CURRENT_USER.id,'administrator') ? `<button class="btn" onclick="assignRoleToUser('${userId}', document.getElementById('roleSelect').value)">Przypisz rolę</button>` : ''}
-          ${hasRole(CURRENT_USER.id,'vowner') && userId!==CURRENT_USER.id ? `<button class="danger" onclick="deleteUser('${userId}')">Usuń użytkownika</button>` : ''}
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('editUserForm').addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const disp = document.getElementById('editDisplay').value.trim();
-    const newPass = document.getElementById('editPass').value;
-    if (disp) user.displayName = disp;
-    if (newPass) user.passwordHash = await hashPassword(newPass);
-    saveAndRefresh();
-  });
-}
-
-function assignRoleToUser(userId, roleName) {
-  if (!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień');
-  const role = STATE.roles.find(r=>r.name===roleName);
-  if (!role) return alert('Rola nie istnieje');
-  if (STATE.user_roles.some(ur=>ur.userId===userId && ur.roleId===role.id)) return alert('Użytkownik już ma tę rolę');
-  STATE.user_roles.push({ id: uid('ur'), userId, roleId: role.id });
-  saveAndRefresh();
-}
-
-function deleteUser(userId) {
-  if (!hasRole(CURRENT_USER.id,'vowner')) return alert('Tylko vowner może usuwać użytkowników');
-  if (userId === CURRENT_USER.id) return alert('Nie możesz usunąć własnego konta');
-  STATE.users = STATE.users.filter(u=>u.id!==userId);
-  STATE.user_roles = STATE.user_roles.filter(ur=>ur.userId!==userId);
-  saveAndRefresh();
-}
-
-// Roles page
-function renderRolesPage(container) {
-  const canView = hasRole(CURRENT_USER.id, 'support') || hasRole(CURRENT_USER.id, 'administrator') || hasRole(CURRENT_USER.id, 'vowner');
-  if (!canView) {
-    container.innerHTML = `<div class="card"><div class="small">Brak uprawnień do przeglądania ról.</div></div>`;
-    return;
+  function refreshUsersTable(){
+    const tbody = document.getElementById('users-table');
+    tbody.innerHTML = '';
+    const now = Date.now();
+    data.users.forEach(user=>{
+      const diff = now - user.lastActive;
+      const status = diff<60000 ? 'Online' :
+                     diff<3600000 ? Math.floor(diff/60000)+'m temu' :
+                     diff<86400000 ? Math.floor(diff/3600000)+'h temu' :
+                     Math.floor(diff/86400000)+'d temu';
+      tbody.innerHTML += `
+        <tr>
+          <td>${user.username}</td>
+          <td>${user.display}</td>
+          <td>${user.role}</td>
+          <td>${user.plusy}</td>
+          <td>${user.minusy}</td>
+          <td>${status}</td>
+          <td>
+            <button onclick="promote('${user.username}')">Awans</button>
+            <button onclick="demote('${user.username}')">Degradacja</button>
+          </td>
+        </tr>
+      `;
+    });
   }
-  const rows = STATE.roles.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td><button class="btn-ghost" onclick="showRoleUsers('${r.id}')">Pokaż użytkowników</button></td></tr>`).join('');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Role</h3>
-      <div class="small muted">Tworzyć role może: <strong>vowner</strong></div>
-      ${hasRole(CURRENT_USER.id,'vowner') ? `
-        <form id="createRoleForm" class="form-row" style="margin-bottom:12px">
-          <input id="newRoleName" placeholder="nazwa roli" required />
-          <div style="width:100%;display:flex;justify-content:flex-end"><button class="btn" type="submit">Stwórz rolę</button></div>
-        </form>` : ''}
-      <table><thead><tr><th>Nazwa</th><th>Akcje</th></tr></thead><tbody>${rows}</tbody></table>
-    </div>
-  `;
-  const form = document.getElementById('createRoleForm');
-  if (form) form.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const name = document.getElementById('newRoleName').value.trim();
-    if (!name) return;
-    if (STATE.roles.some(r=>r.name===name)) return alert('Rola już istnieje');
-    STATE.roles.push({ id: uid('r'), name });
-    saveAndRefresh();
-  });
-}
 
-function showRoleUsers(roleId) {
-  const role = STATE.roles.find(r=>r.id===roleId);
-  if (!role) return;
-  const userIds = STATE.user_roles.filter(ur=>ur.roleId===roleId).map(ur=>ur.userId);
-  const users = STATE.users.filter(u=>userIds.includes(u.id));
-  const container = document.getElementById('pageArea');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Użytkownicy z rolą: ${escapeHtml(role.name)}</h3>
-      <ul>${users.map(u=>`<li>${escapeHtml(u.username)} — ${escapeHtml(u.displayName||'')}</li>`).join('')}</ul>
-      <div style="margin-top:10px"><button class="btn-ghost" onclick="renderPanel()">Powrót</button></div>
-    </div>
-  `;
-}
+  function promote(username){
+    const roles = ['support','moderator','administrator','vowner'];
+    const u = data.users.find(x=>x.username===username);
+    if(!u) return;
+    let idx = roles.indexOf(u.role);
+    if(idx<roles.length-1) u.role = roles[idx+1];
+    saveData();
+    refreshUsersTable();
+  }
 
-// Server settings
-function renderServerPage(container) {
-  const canView = hasRole(CURRENT_USER.id,'support') || hasRole(CURRENT_USER.id,'administrator') || hasRole(CURRENT_USER.id,'vowner');
-  if (!canView) return container.innerHTML = `<div class="card"><div class="small">Brak uprawnień</div></div>`;
-  const s = STATE.settings || {};
-  container.innerHTML = `
-    <div class="card">
-      <h3>Ustawienia serwera</h3>
-      <form id="serverForm" class="form-row">
-        <input id="svName" placeholder="Nazwa serwera" value="${escapeHtml(s.serverName||'')}" />
-        <textarea id="svWelcome" placeholder="Wiadomość powitalna" style="min-height:80px">${escapeHtml(s.welcomeMessage||'')}</textarea>
-        <div style="width:100%;display:flex;justify-content:flex-end">
-          <button class="btn" type="submit">Zapisz ustawienia</button>
-        </div>
-      </form>
-    </div>
-  `;
-  document.getElementById('serverForm').addEventListener('submit', (e)=>{
-    e.preventDefault();
-    if (!hasRole(CURRENT_USER.id,'administrator') && !hasRole(CURRENT_USER.id,'vowner')) return alert('Brak uprawnień do zapisu ustawień');
-    STATE.settings.serverName = document.getElementById('svName').value;
-    STATE.settings.welcomeMessage = document.getElementById('svWelcome').value;
-    saveAndRefresh();
-  });
-}
+  function demote(username){
+    const roles = ['support','moderator','administrator','vowner'];
+    const u = data.users.find(x=>x.username===username);
+    if(!u) return;
+    let idx = roles.indexOf(u.role);
+    if(idx>0) u.role = roles[idx-1];
+    saveData();
+    refreshUsersTable();
+  }
 
-function renderServerSummary(){
-  const el = document.getElementById('serverSummary');
-  if (!el) return;
-  el.innerHTML = `<div><strong>${escapeHtml(STATE.settings.serverName||'—')}</strong></div><div class="small muted">${escapeHtml(STATE.settings.welcomeMessage||'—')}</div>`;
-}
+  // ------------------ Plusy / Minusy ------------------
+  function refreshPMUserList(){
+    const select = document.getElementById('pm-user');
+    select.innerHTML = '';
+    data.users.forEach(u=>{
+      if(u.username !== 'adminaccountowner'){
+        select.innerHTML += `<option value="${u.username}">${u.display} (${u.username})</option>`;
+      }
+    });
+  }
 
-// Audit page (simple list of users/roles)
-function renderAuditPage(container) {
-  const rows = STATE.user_roles.map(ur=>{
-    const user = STATE.users.find(u=>u.id===ur.userId);
-    const role = STATE.roles.find(r=>r.id===ur.roleId);
-    return `<tr><td>${escapeHtml(user?.username||'—')}</td><td>${escapeHtml(role?.name||'—')}</td></tr>`;
-  }).join('');
-  container.innerHTML = `
-    <div class="card">
-      <h3>Audit: przypisania ról</h3>
-      <table><thead><tr><th>Użytkownik</th><th>Rola</th></tr></thead><tbody>${rows}</tbody></table>
-    </div>
-  `;
-}
+  function addPlus(){
+    const username = document.getElementById('pm-user').value;
+    const user = data.users.find(u=>u.username===username);
+    if(user){
+      user.plusy++;
+      checkPromotion(user);
+      saveData();
+      refreshUsersTable();
+    }
+  }
 
-// ---------- Misc actions ----------
-function logout(){
-  CURRENT_USER = null;
-  renderApp();
-}
+  function addMinus(){
+    const username = document.getElementById('pm-user').value;
+    const user = data.users.find(u=>u.username===username);
+    if(user){
+      user.minusy++;
+      checkDemotion(user);
+      saveData();
+      refreshUsersTable();
+    }
+  }
 
-// Download/Restore state (JSON)
-function downloadState(){
-  const a = document.createElement('a');
-  a.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(STATE,null,2));
-  a.download = 'admin-panel-backup.json';
-  a.click();
-}
+  function checkPromotion(user){
+    if(user.plusy>=5) promote(user.username);
+  }
 
-function restoreState(){
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  input.addEventListener('change', (e)=>{
-    const f = e.target.files[0];
-    if (!f) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const parsed = JSON.parse(ev.target.result);
-        // simple sanity: must have users and roles arrays
-        if (!Array.isArray(parsed.users) || !Array.isArray(parsed.roles)) return alert('Plik nieprawidłowy');
-        STATE = parsed;
-        saveAndRefresh();
-      } catch(err) { alert('Błąd parsowania JSON'); }
-    };
-    reader.readAsText(f);
-  });
-  input.click();
-}
+  function checkDemotion(user){
+    if(user.minusy>=3) demote(user.username);
+  }
 
-// ---------- Init ----------
-(async function init(){
-  STATE = await seedIfNeeded();
-  // ensure arrays present
-  STATE.users = STATE.users||[];
-  STATE.roles = STATE.roles||[];
-  STATE.user_roles = STATE.user_roles||[];
-  STATE.settings = STATE.settings||{};
-  // show UI
-  renderApp();
-})();
+  // Automatyczne minusy co 1 dzień offline
+  setInterval(()=>{
+    const now = Date.now();
+    data.users.forEach(user=>{
+      if(now - user.lastActive > 86400000){
+        user.minusy++;
+        checkDemotion(user);
+      }
+    });
+    saveData();
+    refreshUsersTable();
+  }, 60000); // sprawdzanie co minutę dla testów
 
+  // ------------------ Ogłoszenia ------------------
+  function addAnnouncement(){
+    const text = document.getElementById('announcement-text').value.trim();
+    if(!text) return;
+    data.announcements.unshift({text, date:new Date().toLocaleString()});
+    saveData();
+    refreshAnnouncements();
+    document.getElementById('announcement-text').value = '';
+  }
+
+  function refreshAnnouncements(){
+    const list = document.getElementById('announcements-list');
+    list.innerHTML = '';
+    data.announcements.forEach(a=>{
+      list.innerHTML += `<div class="announcement"><b>${a.date}:</b> ${a.text}</div>`;
+    });
+  }
 </script>
 </body>
 </html>
